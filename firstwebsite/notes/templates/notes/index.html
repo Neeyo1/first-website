@@ -1,7 +1,7 @@
 {% if latest_topics_list %}
     {% for topic in latest_topics_list %}
         <div style = "width: 200; height: 50; border: 2px solid black; margin: 10px; font-size: 30px;display: flex;justify-content: center;align-items: center;">
-            <a href="/notes/{{ topic.id }}/">{{ topic.name }}</a>
+            <a href="/notes/topic/{{ topic.id }}/">{{ topic.name }}</a>
         </div>
     {% endfor %}
 {% else %}

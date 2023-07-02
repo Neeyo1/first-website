@@ -1,0 +1,16 @@
+<h1>{{ topic.name }}</h1>
+<h2>{{ topic.description }}</h2>
+<h3>Created by {{ topic.author }}</h3>
+<h3>Created at {{ topic.created_at }}</h3>
+<h3>Last update {{ topic.updated_at }}</h3>
+
+{% if notes %}
+    {% for note in notes %}
+        <div style = "width: 400; height: 50; border: 2px solid black; margin: 10px; font-size: 30px;display: flex;justify-content: center;align-items: center;">
+            <a href="/notes/note/{{ note.id }}/">{{ note.name }}</a>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No notes for this topic are available.</p>
+{% endif %}
+<a href="/notes/">Back to main page</a>

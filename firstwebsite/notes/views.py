@@ -9,6 +9,11 @@ def index(request):
     context = {"latest_topics_list": latest_topics_list}
     return render(request, "notes/index.html", context)
 
-def detail(request, topic_id):
+def topic_detail(request, topic_id):
     topic = get_object_or_404(Topic, pk=topic_id)
-    return render(request, "notes/detail.html", {"topic": topic})
+    notes = topic.note_set.all()
+    return render(request, "notes/topic_detail.html", {"topic": topic, "notes": notes})
+
+def note_detail(request, note_id):
+    note = get_object_or_404(Note, pk=note_id)
+    return render(request, "notes/note_detail.html", {"note": note})
