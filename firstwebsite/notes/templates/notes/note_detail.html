@@ -4,4 +4,9 @@
 <h3>Created by {{ note.author }}</h3>
 <h3>Created at {{ note.created_at }}</h3>
 <h3>Last update {{ note.updated_at }}</h3>
-<a href="/notes/topic/{{ note.topic.id }}/">Back to topic</a>
+<p>
+    <a href="/notes/note/edit/{{ note.id}}">Edit note</a>
+</p>
+<p>
+    <a href="/notes/topic/{{ note.topic.id }}/">Back to topic</a>
+</p>
