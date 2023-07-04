@@ -6,13 +6,14 @@
 
 {% if notes %}
     {% for note in notes %}
-        <div style = "width: 400; height: 50; border: 2px solid black; margin: 10px; font-size: 30px;display: flex;justify-content: center;align-items: center;">
+        <p>
             <a href="/notes/note/{{ note.id }}/">{{ note.name }}</a>
-        </div>
+        </p>
     {% endfor %}
 {% else %}
     <p>No notes for this topic are available.</p>
 {% endif %}
+<hr/>
 <p>
     <a href="/notes/topic/edit/{{ topic.id}}">Edit topic</a>
 </p>

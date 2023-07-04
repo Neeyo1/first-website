@@ -1,12 +1,13 @@
 {% if latest_topics_list %}
     {% for topic in latest_topics_list %}
-        <div style = "width: 200; height: 50; border: 2px solid black; margin: 10px; font-size: 30px;display: flex;justify-content: center;align-items: center;">
+        <p>
             <a href="/notes/topic/{{ topic.id }}/">{{ topic.name }}</a>
-        </div>
+        </p>
     {% endfor %}
 {% else %}
     <p>No topics are available.</p>
 {% endif %}
+<hr/>
 <p>
     <a href="/notes/topic/create/">Create new topic</a>
 </p>
