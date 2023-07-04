@@ -6,13 +6,17 @@ from .forms import TopicForm, NoteForm, CommentForm
 # Create your views here.
 
 def index(request):
-    latest_topics_list = Topic.objects.order_by("-updated_at")
-    context = {"latest_topics_list": latest_topics_list}
+    q_topic = request.GET.get('topic') or ''
+    topics = Topic.objects.filter(name__icontains = q_topic)
+    #latest_topics_list = Topic.objects.order_by("-updated_at")
+    #context = {"latest_topics_list": latest_topics_list}
+    context = {"topics": topics}
     return render(request, "notes/index.html", context)
 
 def topic_detail(request, topic_id):
+    q_notes = request.GET.get('note') or ''
     topic = get_object_or_404(Topic, pk=topic_id)
-    notes = topic.note_set.all()
+    notes = topic.note_set.filter(name__icontains = q_notes)
     return render(request, "notes/topic_detail.html", {"topic": topic, "notes": notes})
 
 def topic_create(request):

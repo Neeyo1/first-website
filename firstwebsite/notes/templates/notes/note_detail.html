@@ -1,31 +1,37 @@
-<h1>Topic: {{ note.topic.name }}</h1>
-<h2>{{ note.name }}</h2>
-<h2>{{ note.description }}</h2>
-<h3>Created by {{ note.author }}</h3>
-<h3>Created at {{ note.created_at }}</h3>
-<h3>Last update {{ note.updated_at }}</h3>
-
-{% if comments %}
-    {% for comment in comments %}
+<div>
+    <div style = "float:left; width:200px; margin-right:20px;">
+        <hr/>
         <p>
-            <a href="/notes/comment/{{ comment.id }}/">{{ comment.message }} by {{ comment.author }}</a>&nbsp;
-            <a href="/notes/comment/edit/{{ comment.id }}/">Edit</a>&nbsp;
-            <a href="/notes/comment/delete/{{ comment.id }}/">Delete</a>
+            <a href="/notes/note/edit/{{ note.id}}">Edit note</a>
         </p>
-    {% endfor %}
-{% else %}
-    <p>No comments for this note are available.</p>
-{% endif %}
-<hr/>
-<p>
-    <a href="/notes/note/edit/{{ note.id}}">Edit note</a>
-</p>
-<p>
-    <a href="/notes/note/delete/{{ note.id}}">Delete note</a>
-</p>
-<p>
-    <a href="/notes/comment/create/">Add comment</a>
-</p>
-<p>
-    <a href="/notes/topic/{{ note.topic.id }}/">Back to topic</a>
-</p>
+        <p>
+            <a href="/notes/note/delete/{{ note.id}}">Delete note</a>
+        </p>
+        <p>
+            <a href="/notes/comment/create/">Add comment</a>
+        </p>
+        <p>
+            <a href="/notes/topic/{{ note.topic.id }}/">Back to topic</a>
+        </p>
+        <hr/>
+    </div>
+    <div style = "float:left;">
+        <p>Topic: {{ note.topic.name }}</p>
+        <p>{{ note.name }}</p>
+        <p>{{ note.description }}</p>
+        <p>Created by {{ note.author }}</p>
+        <p>Created at {{ note.created_at }}</p>
+        <p>Last update {{ note.updated_at }}</p>
+        {% if comments %}
+            {% for comment in comments %}
+                <p>
+                    <a href="/notes/comment/{{ comment.id }}/">{{ comment.message }} by {{ comment.author }}</a>&nbsp;
+                    <a href="/notes/comment/edit/{{ comment.id }}/">Edit</a>&nbsp;
+                    <a href="/notes/comment/delete/{{ comment.id }}/">Delete</a>
+                </p>
+            {% endfor %}
+        {% else %}
+            <p>No comments for this note are available.</p>
+        {% endif %}
+    </div>
+</div>
