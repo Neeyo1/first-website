@@ -10,4 +10,6 @@ urlpatterns = [
     path("topic/edit/<int:topic_id>", views.topic_edit, name="topic_edit"),
     path("note/create/", views.note_create, name="note_create"),
     path("note/edit/<int:note_id>", views.note_edit, name="note_edit"),
+    path("topic/delete/<int:topic_id>", views.topic_delete, name="topic_delete"),
+    path("note/delete/<int:note_id>", views.note_delete, name="note_delete"),
 ]
