@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Topic, Note, Comment
+from django.contrib.auth.models import User
 from .forms import TopicForm, NoteForm, CommentForm
 
 # Create your views here.
@@ -140,3 +141,14 @@ def comment_delete(request, comment_id):
         'object_to_delete': comment
         }
     return render(request, "notes/delete_form.html", context)
+
+def login_to_page(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        try:
+            user = User.objects.get(username=username)
+        except:
+            print("Incorrct login or password")
+    context = {}
+    return render(request, "notes/login_register_form.html", context)

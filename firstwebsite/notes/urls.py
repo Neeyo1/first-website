@@ -20,4 +20,6 @@ urlpatterns = [
     path("comment/create/", views.comment_create, name="comment_create"),
     path("comment/edit/<int:comment_id>/", views.comment_edit, name="comment_edit"),
     path("comment/delete/<int:comment_id>/", views.comment_delete, name="comment_delete"),
+    #login
+    path("login/", views.login_to_page, name="login_to_page"),
 ]
