@@ -19,13 +19,13 @@
     </div>
     <div style = float:left;>
         {% if topics %}
-    {% for topic in topics %}
-        <p>
-            <a href="/notes/topic/{{ topic.id }}/">{{ topic.name }}</a>
-        </p>
-    {% endfor %}
-{% else %}
-    <p>No topics are available.</p>
-{% endif %}
+            {% for topic in topics %}
+                <p>
+                    <a href="/notes/topic/{{ topic.id }}/">{{ topic.name }}</a>
+                </p>
+            {% endfor %}
+        {% else %}
+            <p>No topics are available.</p>
+        {% endif %}
     </div>
 </div>

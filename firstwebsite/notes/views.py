@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Topic, Note, Comment
 from django.contrib.auth.models import User
 from .forms import TopicForm, NoteForm, CommentForm
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 
@@ -146,9 +147,15 @@ def login_to_page(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        try:
-            user = User.objects.get(username=username)
-        except:
-            print("Incorrct login or password")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            print("Success")
+            return HttpResponseRedirect("/notes/")
+        else:
+            error_message = "Incorrct login or password"
+            context = {'error_message': error_message}
+            return render(request, "notes/login_register_form.html", context)
+        
     context = {}
     return render(request, "notes/login_register_form.html", context)
