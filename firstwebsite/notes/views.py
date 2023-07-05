@@ -4,6 +4,7 @@ from .models import Topic, Note, Comment
 from django.contrib.auth.models import User
 from .forms import TopicForm, NoteForm, CommentForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -21,6 +22,7 @@ def topic_detail(request, topic_id):
     notes = topic.note_set.filter(name__icontains = q_notes)
     return render(request, "notes/topic_detail.html", {"topic": topic, "notes": notes})
 
+@login_required()
 def topic_create(request):
     if request.method == "POST":
         form = TopicForm(request.POST)
@@ -31,8 +33,13 @@ def topic_create(request):
         form = TopicForm()
     return render(request, "notes/create_edit_form.html", {"form": form})
 
+@login_required()
 def topic_edit(request, topic_id):
     topic = get_object_or_404(Topic, pk=topic_id)
+
+    if request.user != topic.author:
+        return HttpResponse("You are not author of this topic")
+
     form = TopicForm(instance=topic)
     if request.method == "POST":
         form = TopicForm(request.POST, instance=topic)
@@ -42,8 +49,13 @@ def topic_edit(request, topic_id):
     context = {"form": form}
     return render(request, "notes/create_edit_form.html", context)
 
+@login_required()
 def topic_delete(request, topic_id):
     topic = get_object_or_404(Topic, pk=topic_id)
+
+    if request.user != topic.author:
+        return HttpResponse("You are not author of this topic")
+
     notes_children = len(topic.note_set.all()) or "0"
     if request.method == "POST":
         topic.delete()
@@ -59,6 +71,7 @@ def note_detail(request, note_id):
     comments = note.comment_set.all()
     return render(request, "notes/note_detail.html", {"note": note, 'comments': comments})
 
+@login_required()
 def note_create(request):
     if request.method == "POST":
         form = NoteForm(request.POST)
@@ -77,8 +90,13 @@ def note_create(request):
         form = NoteForm(initial={'topic': last_topic_id})
     return render(request, "notes/create_edit_form.html", {"form": form})
 
+@login_required()
 def note_edit(request, note_id):
     note = get_object_or_404(Note, pk=note_id)
+
+    if request.user != note.author:
+        return HttpResponse("You are not author of this note")
+
     form = NoteForm(instance=note)
     if request.method == "POST":
         form = NoteForm(request.POST, instance=note)
@@ -88,8 +106,13 @@ def note_edit(request, note_id):
     context = {"form": form}
     return render(request, "notes/create_edit_form.html", context)
 
+@login_required()
 def note_delete(request, note_id):
     note = get_object_or_404(Note, pk=note_id)
+
+    if request.user != note.author:
+        return HttpResponse("You are not author of this note")
+
     comments_children = len(note.comment_set.all()) or "0"
     if request.method == "POST":
         note.delete()
@@ -104,6 +127,7 @@ def comment_detail(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     return render(request, "notes/comment_detail.html", {"comment": comment})
 
+@login_required()
 def comment_create(request):
     if request.method == "POST":
         form = CommentForm(request.POST)
@@ -122,8 +146,13 @@ def comment_create(request):
         form = CommentForm(initial={'note': last_notec_id})
     return render(request, "notes/create_edit_form.html", {"form": form})
 
+@login_required()
 def comment_edit(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
+
+    if request.user != comment.author:
+        return HttpResponse("You are not author of this comment")
+
     form = CommentForm(instance=comment)
     if request.method == "POST":
         form = CommentForm(request.POST, instance=comment)
@@ -133,8 +162,13 @@ def comment_edit(request, comment_id):
     context = {"form": form}
     return render(request, "notes/create_edit_form.html", context)
 
+@login_required()
 def comment_delete(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
+
+    if request.user != comment.author:
+        return HttpResponse("You are not author of this comment")
+
     if request.method == "POST":
         comment.delete()
         return HttpResponseRedirect("/notes/")
