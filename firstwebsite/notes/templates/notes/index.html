@@ -9,12 +9,18 @@
             <a href="/notes/topic/create/">Create new topic</a>
         </p>
         <hr/>
+        {% if request.user.is_authenticated %}
+            <p>
+                <a href="/notes/logout/">Logout</a>
+            </p>
+        {% else %}
         <p>
             <a href="/notes/login/">Login</a>
         </p>
         <p>
             <a href="/notes/register/">Register</a>
         </p>
+        {% endif%}
         <hr/>
     </div>
     <div style = float:left;>

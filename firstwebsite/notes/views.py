@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Topic, Note, Comment
 from django.contrib.auth.models import User
 from .forms import TopicForm, NoteForm, CommentForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
@@ -159,3 +159,7 @@ def login_to_page(request):
         
     context = {}
     return render(request, "notes/login_register_form.html", context)
+
+def logout_from_page(request):
+    logout(request)
+    return HttpResponseRedirect("/notes/")

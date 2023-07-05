@@ -22,4 +22,6 @@ urlpatterns = [
     path("comment/delete/<int:comment_id>/", views.comment_delete, name="comment_delete"),
     #login
     path("login/", views.login_to_page, name="login_to_page"),
+    #logout
+    path("logout/", views.logout_from_page, name="logout_from_page"),
 ]
