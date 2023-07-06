@@ -5,12 +5,14 @@
             <input type="text", name="note", placeholder="Search notes">
         </form>
         <hr/>
-        <p>
-            <a href="/notes/topic/edit/{{ topic.id}}">Edit topic</a>
-        </p>
-        <p>
-            <a href="/notes/topic/delete/{{ topic.id}}">Delete topic</a>
-        </p>
+        {% if request.user == topic.author %}
+            <p>
+                <a href="/notes/topic/edit/{{ topic.id}}">Edit topic</a>
+            </p>
+            <p>
+                <a href="/notes/topic/delete/{{ topic.id}}">Delete topic</a>
+            </p>
+        {% endif %}
         <p>
             <a href="/notes/note/create/">Create new note</a>
         </p>

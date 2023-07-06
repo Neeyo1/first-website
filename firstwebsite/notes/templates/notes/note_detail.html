@@ -1,15 +1,17 @@
 <div>
     <div style = "float:left; width:200px; margin-right:20px;">
         <hr/>
-        <p>
-            <a href="/notes/note/edit/{{ note.id}}">Edit note</a>
-        </p>
-        <p>
-            <a href="/notes/note/delete/{{ note.id}}">Delete note</a>
-        </p>
-        <p>
-            <a href="/notes/comment/create/">Add comment</a>
-        </p>
+        {% if request.user == note.author %}
+            <p>
+                <a href="/notes/note/edit/{{ note.id}}">Edit note</a>
+            </p>
+            <p>
+                <a href="/notes/note/delete/{{ note.id}}">Delete note</a>
+            </p>
+            <p>
+                <a href="/notes/comment/create/">Add comment</a>
+            </p>
+        {% endif %}
         <p>
             <a href="/notes/topic/{{ note.topic.id }}/">Back to topic</a>
         </p>
@@ -26,8 +28,10 @@
             {% for comment in comments %}
                 <p>
                     <a href="/notes/comment/{{ comment.id }}/">{{ comment.message }} by {{ comment.author }}</a>&nbsp;
-                    <a href="/notes/comment/edit/{{ comment.id }}/">Edit</a>&nbsp;
-                    <a href="/notes/comment/delete/{{ comment.id }}/">Delete</a>
+                    {% if request.user == comment.author %}
+                        <a href="/notes/comment/edit/{{ comment.id }}/">Edit</a>&nbsp;
+                        <a href="/notes/comment/delete/{{ comment.id }}/">Delete</a>
+                    {% endif %}
                 </p>
             {% endfor %}
         {% else %}

@@ -10,21 +10,26 @@ from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 def index(request):
+    context = {}
     q_topic = request.GET.get('topic') or ''
     topics = Topic.objects.filter(name__icontains = q_topic)
     #latest_topics_list = Topic.objects.order_by("-updated_at")
     #context = {"latest_topics_list": latest_topics_list}
-    context = {"topics": topics}
+    context["topics"] = topics
     return render(request, "notes/index.html", context)
 
 def topic_detail(request, topic_id):
+    context = {}
     q_notes = request.GET.get('note') or ''
     topic = get_object_or_404(Topic, pk=topic_id)
     notes = topic.note_set.filter(name__icontains = q_notes)
-    return render(request, "notes/topic_detail.html", {"topic": topic, "notes": notes})
+    context["topic"] = topic
+    context["notes"] = notes
+    return render(request, "notes/topic_detail.html", context)
 
-@login_required()
+@login_required(login_url="/notes/login/")
 def topic_create(request):
+    context = {}
     if request.method == "POST":
         form = TopicForm(request.POST)
         if form.is_valid():
@@ -32,10 +37,12 @@ def topic_create(request):
             return HttpResponseRedirect("/notes/")
     else:
         form = TopicForm()
+    context["form"] = form
     return render(request, "notes/create_edit_form.html", {"form": form})
 
-@login_required()
+@login_required(login_url="/notes/login/")
 def topic_edit(request, topic_id):
+    context = {}
     topic = get_object_or_404(Topic, pk=topic_id)
 
     if request.user != topic.author:
@@ -47,11 +54,12 @@ def topic_edit(request, topic_id):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect("/notes/")
-    context = {"form": form}
+    context["form"] = form
     return render(request, "notes/create_edit_form.html", context)
 
-@login_required()
+@login_required(login_url="/notes/login/")
 def topic_delete(request, topic_id):
+    context = {}
     topic = get_object_or_404(Topic, pk=topic_id)
 
     if request.user != topic.author:
@@ -61,19 +69,21 @@ def topic_delete(request, topic_id):
     if request.method == "POST":
         topic.delete()
         return HttpResponseRedirect("/notes/")
-    context = {
-        'object_to_delete': topic,
-        'notes_children': notes_children
-        }
+    context["object_to_delete"] = topic
+    context["notes_children"] = notes_children
     return render(request, "notes/delete_form.html", context)
 
 def note_detail(request, note_id):
+    context = {}
     note = get_object_or_404(Note, pk=note_id)
     comments = note.comment_set.all()
-    return render(request, "notes/note_detail.html", {"note": note, 'comments': comments})
+    context["note"] = note
+    context["comments"] = comments
+    return render(request, "notes/note_detail.html", context)
 
-@login_required()
+@login_required(login_url="/notes/login/")
 def note_create(request):
+    context = {}
     if request.method == "POST":
         form = NoteForm(request.POST)
         if form.is_valid():
@@ -89,10 +99,12 @@ def note_create(request):
             i += 1
         last_topic_id = last_url[slashes_list[-2]+1:slashes_list[-1]]
         form = NoteForm(initial={'topic': last_topic_id})
-    return render(request, "notes/create_edit_form.html", {"form": form})
+    context["form"] = form
+    return render(request, "notes/create_edit_form.html", context)
 
-@login_required()
+@login_required(login_url="/notes/login/")
 def note_edit(request, note_id):
+    context = {}
     note = get_object_or_404(Note, pk=note_id)
 
     if request.user != note.author:
@@ -104,11 +116,12 @@ def note_edit(request, note_id):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect("/notes/")
-    context = {"form": form}
+    context["form"] = form
     return render(request, "notes/create_edit_form.html", context)
 
-@login_required()
+@login_required(login_url="/notes/login/")
 def note_delete(request, note_id):
+    context = {}
     note = get_object_or_404(Note, pk=note_id)
 
     if request.user != note.author:
@@ -118,18 +131,19 @@ def note_delete(request, note_id):
     if request.method == "POST":
         note.delete()
         return HttpResponseRedirect("/notes/")
-    context = {
-        'object_to_delete': note,
-        'comments_children': comments_children
-        }
+    context["object_to_delete"] = note
+    context["comments_children"] = comments_children
     return render(request, "notes/delete_form.html", context)
 
 def comment_detail(request, comment_id):
+    context = {}
     comment = get_object_or_404(Comment, pk=comment_id)
-    return render(request, "notes/comment_detail.html", {"comment": comment})
+    context["comment"] = comment
+    return render(request, "notes/comment_detail.html", context)
 
-@login_required()
+@login_required(login_url="/notes/login/")
 def comment_create(request):
+    context = {}
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -145,10 +159,12 @@ def comment_create(request):
             i += 1
         last_notec_id = last_url[slashes_list[-2]+1:slashes_list[-1]]
         form = CommentForm(initial={'note': last_notec_id})
-    return render(request, "notes/create_edit_form.html", {"form": form})
+    context["form"] = form
+    return render(request, "notes/create_edit_form.html", context)
 
-@login_required()
+@login_required(login_url="/notes/login/")
 def comment_edit(request, comment_id):
+    context = {}
     comment = get_object_or_404(Comment, pk=comment_id)
 
     if request.user != comment.author:
@@ -160,11 +176,12 @@ def comment_edit(request, comment_id):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect("/notes/")
-    context = {"form": form}
+    context["form"] = form
     return render(request, "notes/create_edit_form.html", context)
 
-@login_required()
+@login_required(login_url="/notes/login/")
 def comment_delete(request, comment_id):
+    context = {}
     comment = get_object_or_404(Comment, pk=comment_id)
 
     if request.user != comment.author:
@@ -173,12 +190,11 @@ def comment_delete(request, comment_id):
     if request.method == "POST":
         comment.delete()
         return HttpResponseRedirect("/notes/")
-    context = {
-        'object_to_delete': comment
-        }
+    context["object_to_delete"] = comment
     return render(request, "notes/delete_form.html", context)
 
 def login_to_page(request):
+    context = {}
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -186,13 +202,12 @@ def login_to_page(request):
         if user is not None:
             login(request, user)
             print("Success")
-            return HttpResponseRedirect("/notes/")
+            next_url = request.GET.get('next') or "/notes/"
+            return HttpResponseRedirect(next_url)
         else:
             error_message = "Incorrect login or password"
-            context = {'error_message': error_message}
+            context["error_message"] = error_message
             return render(request, "notes/login_form.html", context)
-        
-    context = {}
     return render(request, "notes/login_form.html", context)
 
 def logout_from_page(request):
@@ -200,8 +215,9 @@ def logout_from_page(request):
     return HttpResponseRedirect("/notes/")
 
 def register_to_page(request):
+    context = {}
     form = UserCreationForm()
-    context = {'form': form}
+    context["form"] = form
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -210,6 +226,7 @@ def register_to_page(request):
             return HttpResponseRedirect("/notes/")
         else:
             error_message = "Error during registration"
-            context = {'error_message': error_message, 'form': form}
+            context["error_message"] = error_message
+            context["form"] = form
             return render(request, "notes/register_form.html", context)
     return render(request, "notes/register_form.html", context)
