@@ -11,6 +11,9 @@
         <hr/>
         {% if request.user.is_authenticated %}
             <p>
+                Hi {{ request.user }}
+            </p>
+            <p>
                 <a href="/notes/logout/">Logout</a>
             </p>
         {% else %}

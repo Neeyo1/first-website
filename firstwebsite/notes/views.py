@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .forms import TopicForm, NoteForm, CommentForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 
@@ -187,13 +188,28 @@ def login_to_page(request):
             print("Success")
             return HttpResponseRedirect("/notes/")
         else:
-            error_message = "Incorrct login or password"
+            error_message = "Incorrect login or password"
             context = {'error_message': error_message}
-            return render(request, "notes/login_register_form.html", context)
+            return render(request, "notes/login_form.html", context)
         
     context = {}
-    return render(request, "notes/login_register_form.html", context)
+    return render(request, "notes/login_form.html", context)
 
 def logout_from_page(request):
     logout(request)
     return HttpResponseRedirect("/notes/")
+
+def register_to_page(request):
+    form = UserCreationForm()
+    context = {'form': form}
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return HttpResponseRedirect("/notes/")
+        else:
+            error_message = "Error during registration"
+            context = {'error_message': error_message, 'form': form}
+            return render(request, "notes/register_form.html", context)
+    return render(request, "notes/register_form.html", context)
