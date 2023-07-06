@@ -26,4 +26,6 @@ urlpatterns = [
     path("logout/", views.logout_from_page, name="logout_from_page"),
     #register
     path("register/", views.register_to_page, name="register_to_page"),
+    #user
+    path("user/<int:user_id>/", views.user_detail, name="user_detail"),
 ]

@@ -24,15 +24,20 @@
         <p>Created by {{ note.author }}</p>
         <p>Created at {{ note.created_at }}</p>
         <p>Last update {{ note.updated_at }}</p>
+        <hr/>
         {% if comments %}
             {% for comment in comments %}
                 <p>
-                    <a href="/notes/comment/{{ comment.id }}/">{{ comment.message }} by {{ comment.author }}</a>&nbsp;
+                    <a href="/notes/user/{{ comment.author.id }}/">{{ comment.author }}</a>&nbsp;{{ comment.created_at|timesince }} ago&nbsp;
                     {% if request.user == comment.author %}
                         <a href="/notes/comment/edit/{{ comment.id }}/">Edit</a>&nbsp;
                         <a href="/notes/comment/delete/{{ comment.id }}/">Delete</a>
                     {% endif %}
                 </p>
+                <p>
+                    {{ comment.message }}
+                </p>
+                <hr/>
             {% endfor %}
         {% else %}
             <p>No comments for this note are available.</p>

@@ -76,7 +76,7 @@ def topic_delete(request, topic_id):
 def note_detail(request, note_id):
     context = {}
     note = get_object_or_404(Note, pk=note_id)
-    comments = note.comment_set.all()
+    comments = note.comment_set.all().order_by('-created_at')
     context["note"] = note
     context["comments"] = comments
     return render(request, "notes/note_detail.html", context)
@@ -230,3 +230,13 @@ def register_to_page(request):
             context["form"] = form
             return render(request, "notes/register_form.html", context)
     return render(request, "notes/register_form.html", context)
+
+def user_detail(request, user_id):
+    context = {}
+    user = get_object_or_404(User, pk=user_id)
+    topics = user.topic_set.all().order_by('-created_at')
+    notes = user.note_set.all().order_by('-created_at')
+    context['topics'] = topics
+    context['user'] = user
+    context['notes'] = notes
+    return render(request, "notes/user_detail.html", context)

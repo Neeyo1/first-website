@@ -1,0 +1,40 @@
+<div>
+    <div style = "float:left; width:200px; margin-right:20px;">
+        <hr/>
+        <p>
+            <a href="/notes/">Back to home page</a>
+        </p>
+        <hr/>
+    </div>
+    <div style = "float:left;">
+        <hr/>
+        <p>Username: {{ user.username }}</p>
+        <p>E-mail: {{ user.email }}</p>
+        {% if user.first_name %}
+            <p>Name: {{ user.first_name }}</p>
+        {% else %}
+            <p>Name: <i>Not set</i></p>
+        {% endif %}
+        <p>Joined at: {{ user.date_joined }}</p>
+        <p>Last login: {{ user.last_login|timesince }} ago</p>
+        {% if topics %}
+            <hr/>
+            Topics and notes created by {{ user.username }}:
+            {% for topic in topics %}
+                <p>
+                    <a href="/notes/topic/{{ topic.id }}/">{{ topic.name }}</a>
+                </p>
+                {% if notes %}
+                    {% for note in notes %}
+                        {% if note.topic.name == topic.name %}
+                            <p>
+                                <a href="/notes/note/{{ note.id }}/">&emsp;{{ note.name }}</a>
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <hr/>
+    </div>
+</div>
