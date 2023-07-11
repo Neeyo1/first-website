@@ -1,0 +1,20 @@
+<form action="" method="post">
+    {% csrf_token %}
+    {% if object_to_complete.is_completed %}
+        <p>
+            You are setting {{ object_to_complete }} as uncomplete. Are you sure?
+        </p>
+        <p>
+            <a href = "{{ request.META.HTTP_REFERER }}">No, go back</a>
+        </p>
+        <input type="submit" value="Yes, set as uncomplete">
+    {% else %}
+        <p>
+            You are setting {{ object_to_complete }} as complete. Are you sure?
+        </p>
+        <p>
+            <a href = "{{ request.META.HTTP_REFERER }}">No, go back</a>
+        </p>
+        <input type="submit" value="Yes, set as complete">
+    {% endif %}
+</form>

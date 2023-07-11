@@ -8,9 +8,18 @@
             <p>
                 <a href="/notes/note/delete/{{ note.id}}">Delete note</a>
             </p>
-            <p>
-                <a href="/notes/comment/create/">Add comment</a>
-            </p>
+            {% if note.is_completed %}
+                <p>
+                    <a href="/notes/note/complete/{{ note.id}}">Set note as uncomplete</a>
+                </p>
+            {% else %}
+                <p>
+                    <a href="/notes/note/complete/{{ note.id}}">Set note as complete</a>
+                </p>
+                <p>
+                    <a href="/notes/comment/create/">Add comment</a>
+                </p>
+            {% endif %}
         {% endif %}
         <p>
             <a href="/notes/topic/{{ note.topic.id }}/">Back to topic</a>
@@ -19,7 +28,7 @@
     </div>
     <div style = "float:left;">
         <p>Topic: {{ note.topic.name }}</p>
-        <p>{{ note.name }}</p>
+        <p>{{ note.name }}[{{ note.is_completed }}]</p>
         <p>{{ note.description }}</p>
         <p>Created by {{ note.author }}</p>
         <p>Created at {{ note.created_at }}</p>

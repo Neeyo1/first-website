@@ -25,6 +25,9 @@ class Note(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def is_completed(self):
+        return self.completed
 
 class Comment(models.Model):
     note = models.ForeignKey(Note, on_delete=models.SET_NULL, null=True)

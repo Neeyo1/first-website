@@ -142,11 +142,35 @@ def comment_detail(request, comment_id):
     return render(request, "notes/comment_detail.html", context)
 
 @login_required(login_url="/notes/login/")
+def note_complete(request, note_id):
+    context = {}
+    note = get_object_or_404(Note, pk=note_id)
+
+    if request.user != note.author:
+        return HttpResponse("You are not author of this note")
+    
+    if request.method == "POST":
+        note.completed = not note.completed
+        note.save()
+        return HttpResponseRedirect("/notes/")
+
+    context["object_to_complete"] = note
+    return render(request, "notes/complete_form.html", context)
+
+def comment_detail(request, comment_id):
+    context = {}
+    comment = get_object_or_404(Comment, pk=comment_id)
+    context["comment"] = comment
+    return render(request, "notes/comment_detail.html", context)
+
+@login_required(login_url="/notes/login/")
 def comment_create(request):
     context = {}
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
+            if form.cleaned_data['note'].is_completed():
+                return HttpResponse("You cannot add comment in completed note")
             form.save()
             return HttpResponseRedirect("/notes/")
     else:

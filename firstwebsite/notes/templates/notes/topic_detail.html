@@ -30,7 +30,7 @@
         {% if notes %}
             {% for note in notes %}
                 <p>
-                    <a href="/notes/note/{{ note.id }}/">{{ note.name }}</a>
+                    <a href="/notes/note/{{ note.id }}/">{{ note.name }}[{{ note.is_completed }}]</a>
                 </p>
             {% endfor %}
         {% else %}

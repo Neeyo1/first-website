@@ -15,6 +15,7 @@ urlpatterns = [
     path("note/create/", views.note_create, name="note_create"),
     path("note/edit/<int:note_id>", views.note_edit, name="note_edit"),
     path("note/delete/<int:note_id>", views.note_delete, name="note_delete"),
+    path("note/complete/<int:note_id>", views.note_complete, name="note_complete"),
     #comment
     path("comment/<int:comment_id>/", views.comment_detail, name="comment_detail"),
     path("comment/create/", views.comment_create, name="comment_create"),
