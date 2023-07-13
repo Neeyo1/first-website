@@ -33,7 +33,9 @@ def topic_create(request):
     if request.method == "POST":
         form = TopicForm(request.POST)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.author = request.user
+            instance.save()
             return HttpResponseRedirect("/notes/")
     else:
         form = TopicForm()
@@ -87,7 +89,9 @@ def note_create(request):
     if request.method == "POST":
         form = NoteForm(request.POST)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.author = request.user
+            instance.save()
             return HttpResponseRedirect("/notes/")
     else:
         last_url = request.META.get('HTTP_REFERER')
@@ -171,7 +175,9 @@ def comment_create(request):
         if form.is_valid():
             if form.cleaned_data['note'].is_completed():
                 return HttpResponse("You cannot add comment in completed note")
-            form.save()
+            instance = form.save(commit=False)
+            instance.author = request.user
+            instance.save()
             return HttpResponseRedirect("/notes/")
     else:
         last_url = request.META.get('HTTP_REFERER')
