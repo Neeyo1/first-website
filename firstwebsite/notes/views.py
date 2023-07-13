@@ -54,8 +54,8 @@ def topic_edit(request, topic_id):
     if request.method == "POST":
         form = TopicForm(request.POST, instance=topic)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect("/notes/")
+            instance = form.save()
+            return HttpResponseRedirect(f"/notes/topic/{instance.id}/")
     context["form"] = form
     return render(request, "notes/create_edit_form.html", context)
 
@@ -92,17 +92,20 @@ def note_create(request):
             instance = form.save(commit=False)
             instance.author = request.user
             instance.save()
-            return HttpResponseRedirect("/notes/")
+            return HttpResponseRedirect(f"/notes/note/{instance.id}/")
     else:
-        last_url = request.META.get('HTTP_REFERER')
+        '''last_url = request.META.get('HTTP_REFERER')
         slashes_list = []
         i = 0
         for char_in_url in last_url:
             if char_in_url == '/':
                 slashes_list.append(i)
             i += 1
-        last_topic_id = last_url[slashes_list[-2]+1:slashes_list[-1]]
-        form = NoteForm(initial={'topic': last_topic_id})
+        last_topic_id = last_url[slashes_list[-2]+1:slashes_list[-1]]'''
+        topic = request.GET.get('topic') or ''
+        if topic == '':
+            return HttpResponseRedirect("/notes/")
+        form = NoteForm(initial={'topic': topic})
     context["form"] = form
     return render(request, "notes/create_edit_form.html", context)
 
@@ -118,8 +121,8 @@ def note_edit(request, note_id):
     if request.method == "POST":
         form = NoteForm(request.POST, instance=note)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect("/notes/")
+            instance = form.save()
+            return HttpResponseRedirect(f"/notes/note/{instance.id}/")
     context["form"] = form
     return render(request, "notes/create_edit_form.html", context)
 
@@ -133,8 +136,9 @@ def note_delete(request, note_id):
 
     comments_children = len(note.comment_set.all()) or "0"
     if request.method == "POST":
+        topic = note.topic.id
         note.delete()
-        return HttpResponseRedirect("/notes/")
+        return HttpResponseRedirect(f"/notes/topic/{topic}/")
     context["object_to_delete"] = note
     context["comments_children"] = comments_children
     return render(request, "notes/delete_form.html", context)
@@ -156,7 +160,7 @@ def note_complete(request, note_id):
     if request.method == "POST":
         note.completed = not note.completed
         note.save()
-        return HttpResponseRedirect("/notes/")
+        return HttpResponseRedirect(f"/notes/note/{note.id}")
 
     context["object_to_complete"] = note
     return render(request, "notes/complete_form.html", context)
@@ -178,9 +182,9 @@ def comment_create(request):
             instance = form.save(commit=False)
             instance.author = request.user
             instance.save()
-            return HttpResponseRedirect("/notes/")
+            return HttpResponseRedirect(f"/notes/note/{instance.note.id}/")
     else:
-        last_url = request.META.get('HTTP_REFERER')
+        '''last_url = request.META.get('HTTP_REFERER')
         slashes_list = []
         i = 0
         for char_in_url in last_url:
@@ -188,7 +192,11 @@ def comment_create(request):
                 slashes_list.append(i)
             i += 1
         last_notec_id = last_url[slashes_list[-2]+1:slashes_list[-1]]
-        form = CommentForm(initial={'note': last_notec_id})
+        form = CommentForm(initial={'note': last_notec_id})'''
+        note = request.GET.get('note') or ''
+        if note == '':
+            return HttpResponseRedirect("/notes/")
+        form = CommentForm(initial={'note': note})
     context["form"] = form
     return render(request, "notes/create_edit_form.html", context)
 
@@ -205,7 +213,7 @@ def comment_edit(request, comment_id):
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect("/notes/")
+            return HttpResponseRedirect(f"/notes/note/{comment.note.id}/")
     context["form"] = form
     return render(request, "notes/create_edit_form.html", context)
 
@@ -219,7 +227,7 @@ def comment_delete(request, comment_id):
 
     if request.method == "POST":
         comment.delete()
-        return HttpResponseRedirect("/notes/")
+        return HttpResponseRedirect(f"/notes/note/{comment.note.id}/")
     context["object_to_delete"] = comment
     return render(request, "notes/delete_form.html", context)
 
