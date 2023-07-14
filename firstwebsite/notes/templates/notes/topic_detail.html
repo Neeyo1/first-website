@@ -29,9 +29,15 @@
         <p>Last update {{ topic.updated_at }}</p>
         {% if notes %}
             {% for note in notes %}
-                <p>
-                    <a href="/notes/note/{{ note.id }}/">{{ note.name }}[{{ note.is_completed }}]</a>
-                </p>
+                {% if note.is_completed %}
+                    <p>
+                        <a href="/notes/note/{{ note.id }}/">{{ note.name }}[closed]</a>
+                    </p>
+                {% else %}
+                    <p>
+                        <a href="/notes/note/{{ note.id }}/">{{ note.name }}</a>
+                    </p>
+                {% endif %}
             {% endfor %}
         {% else %}
             <p>No notes for this topic are available.</p>

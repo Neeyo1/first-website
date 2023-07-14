@@ -28,7 +28,15 @@
     </div>
     <div style = "float:left;">
         <p>Topic: {{ note.topic.name }}</p>
-        <p>{{ note.name }}[{{ note.is_completed }}]</p>
+        {% if note.is_completed %}
+            <p>
+                {{ note.name }}[closed]
+            </p>
+        {% else %}
+            <p>
+                {{ note.name }}
+            </p>
+        {% endif %}
         <p>{{ note.description }}</p>
         <p>Created by {{ note.author }}</p>
         <p>Created at {{ note.created_at }}</p>
