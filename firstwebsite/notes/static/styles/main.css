@@ -1,3 +1,73 @@
 body{
-    background-color: white;;
+    background-color: white;
+}
+
+.navbar{
+    border-bottom: 2px solid black;
+    height:50px;
+}
+
+.navbar > a{
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-panel{
+    float:left;
+    width:15%;
+    height:90%;
+    border-right: 2px solid black;
+    margin-right:0;
+}
+
+.right-panel{
+    float:left;
+    width: 84%;
+    height:90%;
+    font-size: 20px;
+}
+
+.left-panel > .search-bar{
+    border-bottom: 2px solid black;
+}
+
+.left-panel > .search-bar > h3{
+    text-align: center;
+}
+
+.topic, .note{
+    font-size: 20px;
+    min-height:40px;
+    width:100%;
+    border-bottom: 2px solid black;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.comment{
+    font-size: 20px;
+    min-height:40px;
+    width:100%;
+    border-bottom: 2px solid black;
+    padding-left: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.topic:nth-child(2n), .note:nth-child(2n), .comment:nth-child(2n){
+    background-color: #F5F5DC;
+}
+
+.name, .description, .created-by, .created-at, .last-update{
+    border-bottom: 2px solid black;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.comment-info{
+    font-size: 15px;
 }

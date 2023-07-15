@@ -1,46 +1,33 @@
-{% load static %}
-<head>
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
-</head>
-<body>
-    <div>
-        <div style = "float:left; width:200px; margin-right:20px;">
-            <h3 style = "text-align: center;">Search topics</h3>
-            <form method="GET", action="">
-                <input type="text", name="topic", placeholder="Search topics">
-            </form>
-            <hr/>
-            <p>
-                <a href="/notes/topic/create/">Create new topic</a>
-            </p>
-            <hr/>
-            {% if request.user.is_authenticated %}
-                <p>
-                    Hi {{ request.user }}
-                </p>
-                <p>
-                    <a href="/notes/logout/">Logout</a>
-                </p>
-            {% else %}
-            <p>
-                <a href="/notes/login/">Login</a>
-            </p>
-            <p>
-                <a href="/notes/register/">Register</a>
-            </p>
-            {% endif%}
-            <hr/>
-        </div>
-        <div style = float:left;>
-            {% if topics %}
-                {% for topic in topics %}
-                    <p>
-                        <a href="/notes/topic/{{ topic.id }}/">{{ topic.name }}</a>
-                    </p>
-                {% endfor %}
-            {% else %}
-                <p>No topics are available.</p>
-            {% endif %}
-        </div>
+{% extends 'notes/template.html' %}
+{% block content %}
+<div>
+    <div class = "left-panel">
+        <h3>Search topics</h3>
+        <form method="GET", action="">
+            <input type="text", name="topic", placeholder="Search topics">
+        </form>
+        <hr/>
+        <a href="/notes/topic/create/">Create new topic</a>
+        <hr/>
+        {% if request.user.is_authenticated %}
+            Hi {{ request.user }}
+            <a href="/notes/logout/">Logout</a>
+        {% else %}
+        <a href="/notes/login/">Login</a>
+         <a href="/notes/register/">Register</a>
+        {% endif%}
+        <hr/>
     </div>
-</body>
+    <div class = "right-panel">
+        {% if topics %}
+            {% for topic in topics %}
+                <div class = "topic">
+                    <a href="/notes/topic/{{ topic.id }}/">{{ topic.name }}</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No topics are available.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

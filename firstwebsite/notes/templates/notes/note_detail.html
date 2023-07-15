@@ -1,63 +1,61 @@
+{% extends 'notes/template.html' %}
+{% block content %}
 <div>
-    <div style = "float:left; width:200px; margin-right:20px;">
-        <hr/>
-        {% if request.user == note.author %}
-            <p>
-                <a href="/notes/note/edit/{{ note.id}}">Edit note</a>
-            </p>
-            <p>
-                <a href="/notes/note/delete/{{ note.id}}">Delete note</a>
-            </p>
+    <div class = "left-panel">
+        <div class = "name">
+            <a href="/notes/topic/{{ note.topic.id}}">&lt;-- {{ note.topic.name }}</a>
+        </div>
+        <div class = "name">
             {% if note.is_completed %}
-                <p>
-                    <a href="/notes/note/complete/{{ note.id}}">Set note as uncomplete</a>
-                </p>
+                {{ note.name }}[closed]
             {% else %}
-                <p>
-                    <a href="/notes/note/complete/{{ note.id}}">Set note as complete</a>
-                </p>
-                <p>
-                    <a href="/notes/comment/create/?note={{ note.id }}">Add comment</a>
-                </p>
+                {{ note.name }}
+            {% endif %}
+        </div>
+        <div class = "description">
+            {{ note.description }}
+        </div>
+        <div class = "created-by">
+            Created by {{ note.author }}
+        </div>
+        <div class = "created-at">
+            Created at {{ note.created_at }}
+        </div>
+        <div class = "last-update">
+            Last update {{ note.updated_at }}
+        </div>
+        {% if request.user == note.author %}
+            <a href="/notes/note/edit/{{ note.id}}">Edit note</a>
+            <a href="/notes/note/delete/{{ note.id}}">Delete note</a>
+            {% if note.is_completed %}
+                <a href="/notes/note/complete/{{ note.id}}">Set note as uncomplete</a>
+            {% else %}
+                <a href="/notes/note/complete/{{ note.id}}">Set note as complete</a>
+                <a href="/notes/comment/create/?note={{ note.id }}">Add comment</a>
             {% endif %}
         {% endif %}
-        <p>
-            <a href="/notes/topic/{{ note.topic.id }}/">Back to topic</a>
-        </p>
+        <a href="/notes/topic/{{ note.topic.id }}/">Back to topic</a>
         <hr/>
     </div>
-    <div style = "float:left;">
-        <p>Topic: {{ note.topic.name }}</p>
-        {% if note.is_completed %}
-            <p>
-                {{ note.name }}[closed]
-            </p>
-        {% else %}
-            <p>
-                {{ note.name }}
-            </p>
-        {% endif %}
-        <p>{{ note.description }}</p>
-        <p>Created by {{ note.author }}</p>
-        <p>Created at {{ note.created_at }}</p>
-        <p>Last update {{ note.updated_at }}</p>
-        <hr/>
+    <div class = "right-panel">
         {% if comments %}
             {% for comment in comments %}
-                <p>
-                    <a href="/notes/user/{{ comment.author.id }}/">{{ comment.author }}</a>&nbsp;{{ comment.created_at|timesince }} ago&nbsp;
-                    {% if request.user == comment.author %}
-                        <a href="/notes/comment/edit/{{ comment.id }}/">Edit</a>&nbsp;
-                        <a href="/notes/comment/delete/{{ comment.id }}/">Delete</a>
-                    {% endif %}
-                </p>
-                <p>
-                    {{ comment.message }}
-                </p>
-                <hr/>
+                <div class = "comment">
+                    <div class = "comment-info">
+                        <a href="/notes/user/{{ comment.author.id }}/">{{ comment.author }}</a>&nbsp;{{ comment.created_at|timesince }} ago&nbsp;
+                        {% if request.user == comment.author %}
+                            <a href="/notes/comment/edit/{{ comment.id }}/">Edit</a>&nbsp;
+                            <a href="/notes/comment/delete/{{ comment.id }}/">Delete</a>
+                        {% endif %}
+                    </div>
+                    <div class = "comment-body">
+                        {{ comment.message }}
+                    </div>
+                </div>
             {% endfor %}
         {% else %}
             <p>No comments for this note are available.</p>
         {% endif %}
     </div>
 </div>
+{% endblock content %}
